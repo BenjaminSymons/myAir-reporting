@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  airreport:
+    build:
+      context: .
+    ports:
+      - 3001:3001
+      - 9229:9229
+    environment:
+      - SERVER_PORT=3001
+      - MYAIR_IP=192.168.0.30
+      - MYAIR_PORT=2025
+      - MYAIR_AIRCON=ac1
+      - DB_CONNECTIONSTRING=mongodb://192.168.0.66:27017/AirconReports
+      - DB_DATABASE=myair
+    volumes:
+      - ./:/app
+    command: npm run debug
+
+  mongo:
+    image: mongo:4.2.8
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb:/data/db
+      - mongodb_config:/data/configdb
+volumes:
+  mongodb:
+  mongodb_config:
