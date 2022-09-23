@@ -15,4 +15,4 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag myAir-Reporting:$(date +%s)
+      run: docker build . --file Dockerfile --tag myair-reporting:$(date +%s)
