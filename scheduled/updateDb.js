@@ -1,5 +1,6 @@
 const CronJob = require("node-cron");
 const dbo = require("../db/connect");
+const MyAir = require("../myAir");
 
 /**
  *
@@ -23,7 +24,7 @@ exports.initScheduledJobs = (client) => {
 
     dbConnect.collection("Zones").insertOne(updateObject);
 
-    console.log("Updated records");
+    console.log(`Updated records: ${timestamp}`);
   });
 
   scheduledJobFunction.start();

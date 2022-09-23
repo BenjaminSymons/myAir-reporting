@@ -1,4 +1,4 @@
-const fetch = require("node-fetch");
+const {default: fetch} = require("node-fetch");
 
 // {
 //     "aircons": {
@@ -36,6 +36,9 @@ const fetch = require("node-fetch");
 // }
 
 class MyAir {
+  /**
+   * @param {string} host
+   */
   constructor(host, port = 2025, aircon = "ac1") {
     this._host = host;
     this._port = port;
@@ -44,6 +47,9 @@ class MyAir {
     this._zones = [];
   }
 
+  /**
+   * @param {string} request
+   */
   async _request(request) {
     let url = `http://${this._host}:${this._port}/${request}`;
 

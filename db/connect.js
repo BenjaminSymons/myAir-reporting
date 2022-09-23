@@ -1,43 +1,20 @@
-const { MongoClient } = require("mongodb");
+const { MongoClient, Logger } = require("mongodb");
 const connectionString = process.env.DB_CONNECTIONSTRING;
-const client = new MongoClient(connectionString, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+const client = new MongoClient(connectionString);
 
 let dbConnection;
 
-// module.exports = {
-//   connectToServer: function (callback) {
-//     client.connect(function (err, db) {
-//       if (err || !db) {
-//         return callback(err);
-//       }
-
-//       dbConnection = db.db(process.env.DB_DATABASE);
-//       console.log("Successfully connected to MongoDB");
-
-//       return callback();
-//     });
-//   },
-
-//   getDb: function () {
-//     return dbConnection;
-//   },
-// };
+Logger.setLevel("info");
 
 module.exports = {
-  connectToServer: function (callback) {
+  connectToServer: function () {
     client
       .connect()
       .then((db) => {
         dbConnection = db.db(process.env.DB_DATABASE);
         console.log("Successfully connected to MongoDB");
       })
-      .catch((err) =>
-    {
-      return callback(err);
-    })
+      .catch(console.dir);
   },
   getDb: function () {
     return dbConnection;
