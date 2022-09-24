@@ -10,21 +10,32 @@ exports.initScheduledJobs = (client) => {
   const scheduledJobFunction = CronJob.schedule("*/15 * * * *", async () => {
     await client.update();
 
-    let zones = client.zones;
-    let myZone = client.myzone;
-    let mode = client.mode;
-    let fan = client.fanspeed;
+    const zones = client.zoneArray;
+    const myZone = client.myzone;
+    const info = {
+      fan: client.info.fan,
+      mode: client.info.mode,
+      setTemp: client.info.setTemp,
+      state: client.info.state,
+    };
     let timestamp = new Date();
     timestamp = new Date(
       timestamp.getTime() - timestamp.getTimezoneOffset() * 60 * 1000
     );
 
-    let updateObject = { timestamp: timestamp, myzone: myZone, mode: mode, fanspeed:fan, ...zones };
+    let updateObject = {
+      timestamp: timestamp,
+      myZone: myZone,
+      myZoneName: zones[myZone - 1]["name"],
+      ...info,
+      zones: [...zones],
+    };
+
     const dbConnect = dbo.getDb();
 
     dbConnect.collection("Zones").insertOne(updateObject);
 
-    console.log(`Updated records: ${timestamp}`);
+    console.log(`Updated records: ${timestamp.toLocaleString()}`);
   });
 
   scheduledJobFunction.start();

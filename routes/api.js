@@ -1,9 +1,9 @@
 const express = require("express");
-
-const apiRoutes = express.Router();
+const createError = require('http-errors');
+const router = express.Router();
 const dbo = require("../db/connect");
 
-apiRoutes.route("/api").get(async function (req, res) {
+router.get('/', async function (req, res) {
   const dbConnect = dbo.getDb();
 
   dbConnect
@@ -19,17 +19,34 @@ apiRoutes.route("/api").get(async function (req, res) {
     });
 });
 
-apiRoutes.route("/api/add").post(function (req, res) {
+
+router.get('/:name', async function (req, res) {
   const dbConnect = dbo.getDb();
 
-  dbConnect.collection("matches").insertOne(res, function (err, result) {
-    if (err) {
-      res.status(400).send("Error inserting zones");
-    } else {
-      console.log(`Added a new temp recording for all zones with id ${result.insertedId}`);
-      res.status(204).send();
-    }
-  });
+  dbConnect
+    .collection("Zones")
+    .find({name:req.params.name})
+    .limit(50)
+    .toArray(function (err, result) {
+      if (err) {
+        res.status(400).send(`Error fetching zone for param ${req.params.name}!`);
+      } else {
+        res.json(result);
+      }
+    });
 });
 
-module.exports = apiRoutes;
+// apiRoutes.route("/add").post(function (req, res) {
+//   const dbConnect = dbo.getDb();
+
+//   dbConnect.collection("matches").insertOne(res, function (err, result) {
+//     if (err) {
+//       res.status(400).send("Error inserting zones");
+//     } else {
+//       console.log(`Added a new temp recording for all zones with id ${result.insertedId}`);
+//       res.status(204).send();
+//     }
+//   });
+// });
+
+module.exports = router;

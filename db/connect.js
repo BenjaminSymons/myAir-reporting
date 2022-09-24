@@ -4,7 +4,7 @@ const client = new MongoClient(connectionString);
 
 let dbConnection;
 
-Logger.setLevel("info");
+Logger.setLevel("debug");
 
 module.exports = {
   connectToServer: function () {

@@ -90,8 +90,21 @@ class MyAir {
     if (!this._system) {
       throw new Error("Update function needs to be called first");
     }
-    this._zones = Object.values(this._system["aircons"][this._aircon]["zones"]);
+    let zoneArray = [];
+    for (const zone in this.zones) {
+      let entries = [["zone", zone]];
+      entries = [...entries, ...Object.entries(this.zones[zone])];
+      zoneArray.push(Object.fromEntries(entries));
+    }
+    this._zones = zoneArray
     return this._zones;
+  }
+
+  get info() {
+    if (!this._system) {
+      throw new Error("Update function needs to be called first");
+    }
+    return this._system["aircons"][this._aircon]["info"];
   }
 
   get mode() {
