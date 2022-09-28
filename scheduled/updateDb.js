@@ -19,9 +19,6 @@ exports.initScheduledJobs = (client) => {
       state: client.info.state,
     };
     let timestamp = new Date();
-    timestamp = new Date(
-      timestamp.getTime() - timestamp.getTimezoneOffset() * 60 * 1000
-    );
 
     let updateObject = {
       timestamp: timestamp,

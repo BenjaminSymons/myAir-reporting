@@ -26,7 +26,7 @@ app.use(cors());
 app.use("/api", apiRoutes);
 
 // Execute scheduled tasks
-if(process.env.NODE_ENV === "production") {
+if (process.env.NODE_ENV === "production") {
   scheduledFunctions.initScheduledJobs(client);
 }
 
@@ -56,9 +56,11 @@ app.get("/update", async (req, res) => {
     state: client.info.state,
   };
   let timestamp = new Date();
+  console.log(timestamp);
   timestamp = new Date(
     timestamp.getTime() - timestamp.getTimezoneOffset() * 60 * 1000
   );
+  console.log(timestamp);
 
   let updateObject = {
     timestamp: timestamp,
