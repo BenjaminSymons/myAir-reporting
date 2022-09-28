@@ -26,20 +26,22 @@ app.use(cors());
 app.use("/api", apiRoutes);
 
 // Execute scheduled tasks
-scheduledFunctions.initScheduledJobs(client);
+if(process.env.NODE_ENV === "production") {
+  scheduledFunctions.initScheduledJobs(client);
+}
 
 app.get("/zones", async (req, res) => {
   await client.update();
   res.send(client.zoneArray);
   // console.log(client.zones ='{"z02":{"state":"open"}}');
-  console.log(client.zoneArray);
+  // console.log(client.zoneArray);
 });
 
 app.get("/info", async (req, res) => {
   await client.update();
   res.send(`<pre>${JSON.stringify(client.info, null, 2)}</pre>`);
   // console.log(client.zones ='{"z02":{"state":"open"}}');
-  console.log(client.zoneArray);
+  // console.log(client.zoneArray);
 });
 
 app.get("/update", async (req, res) => {
