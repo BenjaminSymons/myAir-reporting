@@ -12,7 +12,7 @@ module.exports = {
       .connect()
       .then((db) => {
         dbConnection = db.db(process.env.DB_DATABASE);
-        console.log("Successfully connected to MongoDB");
+        console.log(`Successfully connected to MongoDB. ${client.options.hosts}`);
       })
       .catch(console.dir);
   },

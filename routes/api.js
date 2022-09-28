@@ -28,14 +28,13 @@ router.get("/zones", async function (req, res) {
       if (err) {
         res.status(400).send("Error fetching zones!");
       } else {
-        let temp = result.map(element => {
+        result.map((element) => {
           for (let index = 0; index < element.zones.length; index++) {
             const currentElement = element.zones[index];
-            element[currentElement.name] = currentElement.measuredTemp
+            element[currentElement.name] = currentElement.measuredTemp;
           }
           delete element.zones;
-        })
-        result = [...result, temp];
+        });
         // res.json(docs);
         res.json(result);
         // res.send(`<pre>${JSON.stringify(result, null, 2)}</pre>`);
@@ -43,30 +42,31 @@ router.get("/zones", async function (req, res) {
     });
 });
 
-router.get('/all', async function(req, res) {
+router.get("/all", async function (req, res) {
   const agg = [
     {
-      '$unwind': {
-        'path': '$zones'
-      }
-    }, {
-      '$project': {
-        'timestamp': '$timestamp', 
-        'zone': '$zones.name', 
-        'temperature': '$zones.measuredTemp'
-      }
-    }
+      $unwind: {
+        path: "$zones",
+      },
+    },
+    {
+      $project: {
+        timestamp: "$timestamp",
+        zone: "$zones.name",
+        temperature: "$zones.measuredTemp",
+      },
+    },
   ];
-  
+
   const dbConnect = dbo.getDb();
 
-  const coll = dbConnect.collection('Zones');
+  const coll = dbConnect.collection("Zones");
   const cursor = coll.aggregate(agg);
   const result = await cursor.toArray();
   // res.send(`<pre>${JSON.stringify(result, null, 2)}</pre>`);
   res.json(result);
   // await dbConnect.close();
-})
+});
 
 router.get("/:name", async function (req, res) {
   const dbConnect = dbo.getDb();
